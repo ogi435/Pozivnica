@@ -169,7 +169,7 @@ input {
 // Confetti on load
   function toggleMusic() {
   const music = document.getElementById("bgMusic");
-  music.play ? music.pause() : music.play();
+  music.paused ? music.play() : music.pause();
 }
 window.onload = function() {
   confetti({
@@ -214,6 +214,7 @@ countdown(`March 15, ${currentYear} 23:59:59`, "rsvpCountdown", true);
 
 </body>
 </html>
+
 
 
 
