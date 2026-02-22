@@ -133,6 +133,8 @@ input {
   <h1>Petar puni 18 🎉</h1>
   <p>Spremi se za veče koje se pamti!</p>
 
+  <button class="music-btn" onclick="toggleMusic()">🔊 Muzika ON/OFF</button>
+
   <div class="info">
     <p><strong>Datum:</strong> 5. april</p>
     <p><strong>Lokacija:</strong> 
@@ -165,6 +167,10 @@ input {
 
 <script>
 // Confetti on load
+  function toggleMusic() {
+  const music = document.getElementById("bgMusic");
+  music.paused ? music.play() : music.pause();
+}
 window.onload = function() {
   confetti({
     particleCount: 150,
@@ -208,4 +214,5 @@ countdown(`March 15, ${currentYear} 23:59:59`, "rsvpCountdown", true);
 
 </body>
 </html>
+
 
