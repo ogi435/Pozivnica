@@ -171,16 +171,13 @@ input {
 
 function toggleMusic() {
   const music = document.getElementById("bgMusic");
-  const btn = document.querySelector(".music-btn");
   
   if (!isMusicPlaying) {
     music.play();
     isMusicPlaying = true;
-    btn.innerText = "🔇 Muzika OFF";
   } else {
     music.pause();
     isMusicPlaying = false;
-    btn.innerText = "🔊 Muzika ON";
   }
   // Confetti on load
 window.onload = function() {
@@ -226,6 +223,7 @@ countdown(`March 15, ${currentYear} 23:59:59`, "rsvpCountdown", true);
 
 </body>
 </html>
+
 
 
 
