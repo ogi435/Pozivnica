@@ -166,11 +166,23 @@ input {
 </div>
 
 <script>
-// Confetti on load
-  function toggleMusic() {
+
+  let isMusicPlaying = false;
+
+function toggleMusic() {
   const music = document.getElementById("bgMusic");
-  music.play ? music.pause() : music.play();
-}
+  const btn = document.querySelector(".music-btn");
+  
+  if (!isMusicPlaying) {
+    music.play();
+    isMusicPlaying = true;
+    btn.innerText = "🔇 Muzika OFF";
+  } else {
+    music.pause();
+    isMusicPlaying = false;
+    btn.innerText = "🔊 Muzika ON";
+  }
+  // Confetti on load
 window.onload = function() {
   confetti({
     particleCount: 150,
@@ -214,6 +226,7 @@ countdown(`March 15, ${currentYear} 23:59:59`, "rsvpCountdown", true);
 
 </body>
 </html>
+
 
 
 
