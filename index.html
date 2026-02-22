@@ -130,7 +130,7 @@ input {
 <body>
 
 <!-- Muzika -->
-<audio id="bgMusic" autoplay loop>
+<audio id="bgMusic" loop autoplay muted>
   <source src="music.mp3" type="audio/mpeg">
 </audio>
 
@@ -171,6 +171,13 @@ input {
 </div>
 
 <script>
+    
+    document.body.addEventListener('click', function firstClick() {
+  const music = document.getElementById('bgMusic');
+  music.muted = false;      // unmute
+  music.play();             // start playing if paused
+  document.body.removeEventListener('click', firstClick);
+});
 // Confetti on load
   function toggleMusic() {
   const music = document.getElementById("bgMusic");
@@ -219,6 +226,7 @@ countdown(`March 15, ${currentYear} 23:59:59`, "rsvpCountdown", true);
 
 </body>
 </html>
+
 
 
 
