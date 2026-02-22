@@ -5,6 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Petar puni 18</title>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;700;900&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
 <style>
 body {
   margin: 0;
@@ -27,12 +29,6 @@ body {
   text-align: center;
   box-shadow: 0 0 60px rgba(255,215,0,0.25);
   border: 1px solid rgba(255,215,0,0.2);
-  animation: fadeIn 1s ease-in-out;
-}
-
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
 }
 
 h1 {
@@ -41,7 +37,6 @@ h1 {
   background: linear-gradient(90deg, gold, orange);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  margin-bottom: 10px;
 }
 
 .info {
@@ -49,26 +44,15 @@ h1 {
   padding: 18px;
   border-radius: 15px;
   margin: 25px 0;
-  font-size: 15px;
 }
+
+.info a { color: gold; text-decoration: none; font-weight: bold; }
 
 .countdown-box {
   margin: 15px 0;
   padding: 15px;
   border-radius: 15px;
   background: #111;
-  box-shadow: 0 0 25px rgba(255,215,0,0.15);
-}
-
-.countdown-title {
-  font-weight: 700;
-  margin-bottom: 8px;
-  color: gold;
-}
-
-.countdown {
-  font-size: 18px;
-  font-weight: bold;
 }
 
 button {
@@ -82,21 +66,12 @@ button {
   transition: 0.3s;
 }
 
-.dolazim {
-  background: linear-gradient(90deg, #16a34a, #22c55e);
-  color: white;
-}
-.dolazim:hover {
-  transform: scale(1.05);
-}
+.dolazim { background: linear-gradient(90deg, #16a34a, #22c55e); }
+.ne-dolazim { background: linear-gradient(90deg, #dc2626, #ef4444); }
+.music-btn { background: linear-gradient(90deg, #2563eb, #3b82f6); }
 
-.ne-dolazim {
-  background: linear-gradient(90deg, #dc2626, #ef4444);
-  color: white;
-}
-.ne-dolazim:hover {
-  transform: scale(1.05);
-}
+button:hover { transform: scale(1.05); }
+button:disabled { background: gray; cursor: not-allowed; transform: none; }
 
 input {
   width: 100%;
@@ -104,84 +79,172 @@ input {
   margin-top: 12px;
   border-radius: 12px;
   border: none;
-  font-size: 14px;
 }
 
-.footer {
-  margin-top: 18px;
-  font-size: 14px;
-  color: #aaa;
+/* VIDIMO SE MODAL */
+.modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: 0.4s;
 }
+
+.modal.active {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.modal-content {
+  background: linear-gradient(135deg, #111, #1f1f1f);
+  padding: 50px;
+  border-radius: 25px;
+  text-align: center;
+  box-shadow: 0 0 80px rgba(255,215,0,0.5);
+  animation: pop 0.4s ease;
+}
+
+.modal-content h2 {
+  font-size: 48px;
+  background: linear-gradient(90deg, gold, orange);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin: 0;
+}
+
+@keyframes pop {
+  from { transform: scale(0.7); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+.close-btn {
+  margin-top: 20px;
+  background: linear-gradient(90deg, gold, orange);
+  color: black;
+  font-weight: bold;
+}
+
+.sad-emoji {
+  position: fixed;
+  font-size: 30px;
+  animation: fall 3s linear forwards;
+}
+
+@keyframes fall {
+  to { transform: translateY(100vh); opacity: 0; }
+}
+
+.footer { margin-top: 18px; font-size: 14px; color: #aaa; }
 </style>
 </head>
 <body>
+
+<audio id="bgMusic" loop>
+  <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+</audio>
 
 <div class="card">
   <h1>Petar puni 18 🎉</h1>
   <p>Spremi se za veče koje se pamti!</p>
 
+  <button class="music-btn" onclick="toggleMusic()">🔊 Muzika ON/OFF</button>
+
   <div class="info">
     <p><strong>Datum:</strong> 5. april</p>
-    <p><strong>Lokacija:</strong> Restoran "Kod Kovača"</p>
+    <p><strong>Lokacija:</strong>
+      <a href="https://www.google.com/maps/search/?api=1&query=Restoran+Kod+Kovaca" target="_blank">
+        Restoran "Kod Kovača"
+      </a>
+    </p>
     <p><strong>Potvrda dolaska do:</strong> 15. mart</p>
   </div>
 
   <div class="countdown-box">
-    <div class="countdown-title">Odbrojavanje do rođendana 🎂</div>
-    <div id="birthdayCountdown" class="countdown"></div>
+    <div><strong>Odbrojavanje do rođendana 🎂</strong></div>
+    <div id="birthdayCountdown"></div>
   </div>
 
   <div class="countdown-box">
-    <div class="countdown-title">Rok za potvrdu dolaska ⏳</div>
-    <div id="rsvpCountdown" class="countdown"></div>
+    <div><strong>Rok za potvrdu dolaska ⏳</strong></div>
+    <div id="rsvpCountdown"></div>
   </div>
 
-  <form action="https://formsubmit.co/petar.milenkovic.vr@gmail.com" method="POST">
+  <form id="rsvpForm" action="https://formsubmit.co/petar.milenkovic.vr@gmail.com" method="POST">
     <input type="text" name="Ime" placeholder="Unesi svoje ime" required>
 
-    <button class="dolazim" type="submit" name="Odgovor" value="Dolazim 🎉">
-      Dolazim 🎉
-    </button>
-
-    <button class="ne-dolazim" type="submit" name="Odgovor" value="Ne dolazim 😢">
-      Ne dolazim 😢
-    </button>
+    <button class="dolazim" type="submit" onclick="celebrate(event)" name="Odgovor" value="Dolazim 🎉">Dolazim 🎉</button>
+    <button class="ne-dolazim" type="button" onclick="sadEffect()">Ne dolazim 😢</button>
   </form>
 
-  <div class="footer">
-    Biće muzika, slavlje i dobra energija 🔥
+  <div class="footer">Biće muzika, slavlje i dobra energija 🔥</div>
+</div>
+
+<!-- MODAL -->
+<div id="successModal" class="modal">
+  <div class="modal-content">
+    <h2>VIDIMO SE 🔥🥂</h2>
+    <button class="close-btn" onclick="closeModal()">ZATVORI</button>
   </div>
 </div>
 
 <script>
-function countdown(targetDate, elementId) {
-  const countDownDate = new Date(targetDate).getTime();
+function toggleMusic() {
+  const music = document.getElementById("bgMusic");
+  music.paused ? music.play() : music.pause();
+}
 
-  setInterval(function() {
+function celebrate(e) {
+  e.preventDefault();
+  confetti({ particleCount: 300, spread: 150, origin: { y: 0.6 } });
+  document.getElementById("successModal").classList.add("active");
+  setTimeout(() => document.getElementById("rsvpForm").submit(), 1500);
+}
+
+function closeModal() {
+  document.getElementById("successModal").classList.remove("active");
+}
+
+function sadEffect() {
+  for (let i = 0; i < 20; i++) {
+    const emoji = document.createElement("div");
+    emoji.classList.add("sad-emoji");
+    emoji.innerHTML = "😢";
+    emoji.style.left = Math.random() * 100 + "vw";
+    document.body.appendChild(emoji);
+    setTimeout(() => emoji.remove(), 3000);
+  }
+}
+
+function countdown(targetDate, elementId, disableAfter=false) {
+  const countDownDate = new Date(targetDate).getTime();
+  const interval = setInterval(function() {
     const now = new Date().getTime();
     const distance = countDownDate - now;
-
     if (distance < 0) {
       document.getElementById(elementId).innerHTML = "Vreme je isteklo!";
+      clearInterval(interval);
+      if(disableAfter) {
+        document.querySelectorAll("button").forEach(btn => btn.disabled = true);
+        document.querySelector("input").disabled = true;
+      }
       return;
     }
-
     const days = Math.floor(distance / (1000 * 60 * 60 * 24));
     const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
     const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
     const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-    document.getElementById(elementId).innerHTML =
-      days + "d " + hours + "h " + minutes + "m " + seconds + "s";
+    document.getElementById(elementId).innerHTML = days+"d "+hours+"h "+minutes+"m "+seconds+"s";
   }, 1000);
 }
 
-// Podesi godinu automatski
 const currentYear = new Date().getFullYear();
 countdown(`April 5, ${currentYear} 19:00:00`, "birthdayCountdown");
-countdown(`March 15, ${currentYear} 23:59:59`, "rsvpCountdown");
+countdown(`March 15, ${currentYear} 23:59:59`, "rsvpCountdown", true);
 </script>
 
 </body>
 </html>
-
