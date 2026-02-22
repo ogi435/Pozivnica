@@ -166,20 +166,11 @@ input {
 </div>
 
 <script>
-
-  let isMusicPlaying = false;
-
-function toggleMusic() {
+// Confetti on load
+  function toggleMusic() {
   const music = document.getElementById("bgMusic");
-  
-  if (!isMusicPlaying) {
-    music.play();
-    isMusicPlaying = true;
-  } else {
-    music.pause();
-    isMusicPlaying = false;
-  }
-  // Confetti on load
+  music.play ? music.pause() : music.play();
+}
 window.onload = function() {
   confetti({
     particleCount: 150,
@@ -223,9 +214,6 @@ countdown(`March 15, ${currentYear} 23:59:59`, "rsvpCountdown", true);
 
 </body>
 </html>
-
-
-
 
 
 
